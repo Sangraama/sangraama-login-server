@@ -9,11 +9,11 @@ public class TestMain {
      */
     public static void main(String[] args) {
         // TODO Auto-generated method stub
-        Cluster cluster=CassandraConnection.createCluster("denuwanthi", "denu123", "localhost");
-        CassandraAPI.generateKeySpace(cluster);
-        CassandraAPI.generateColumnFamily("logindetails");
-        CassandraAPI.insert("logindetails", "username", "gamer1");
-        CassandraAPI.retrieve("denuwanthi", "denu123", "localhost", "SangraamaLoginKeyspace", "logindetails", "username");
+   //  Cluster cluster=CassandraConnection.createCluster("localhost");
+    // CassandraAPI.generateKeySpace(cluster);
+     //CassandraAPI.generateColumnFamily("userdetails");
+        CassandraAPI.insert("localhost", "SangraamaLoginKey", "userdetails", "id:username:password:x:y:angle:health:score:bullettype:shiptype","1:denuwanthi:denu123:100:100:30:100:120:1:2","1");
+        CassandraAPI.retrieve("localhost", "SangraamaLoginKey", "userdetails", "username");
     }
 
 }
