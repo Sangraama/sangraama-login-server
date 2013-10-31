@@ -20,5 +20,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/perf4j-0.9.12.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/cassandra-driver-core-1.0.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

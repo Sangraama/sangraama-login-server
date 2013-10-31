@@ -1,9 +1,13 @@
+package org.sangraama.login.controller;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
 import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.WsOutbound;
+import org.sangraama.login.database.cassandra.dao.LoginDetails;
+
 import com.google.gson.Gson;
 
 public class WebSocketConnection extends MessageInbound {
@@ -37,7 +41,9 @@ public class WebSocketConnection extends MessageInbound {
 
     @Override
     protected void onTextMessage(CharBuffer charBuffer) throws IOException {
-
+        String loginDetail = charBuffer.toString();
+        LoginDetails event = gson.fromJson(loginDetail, LoginDetails.class);
+        System.out.println("$$$$$$"+event.getUsername()+event.getPassword());
     }
 
 }
