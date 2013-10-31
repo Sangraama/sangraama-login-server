@@ -2,7 +2,9 @@ package org.sangraama.login.database.cassandra.dao;
 
 public interface User {
 
-    public int getId();
+    public int getType();
+
+    public int getUserId();
 
     public String getUserName();
 
