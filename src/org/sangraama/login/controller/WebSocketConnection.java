@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 
-import org.apache.cassandra.cli.CliParser.newColumnFamily_return;
 import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.WsOutbound;
 import org.sangraama.login.database.cassandra.dao.ClientEvent;
@@ -82,8 +81,8 @@ public class WebSocketConnection extends MessageInbound {
         userImpl.setAngle(0);
         userImpl.setScore(0);
         userImpl.setHealth(100);
-        userImpl.setX((float) (Math.random() * 100));
-        userImpl.setY((float) (Math.random() * 100));
+        userImpl.setX(2800);
+        userImpl.setY(500);
         userImpl.setShipType(1);
         userImpl.setBulletType(1);
 
