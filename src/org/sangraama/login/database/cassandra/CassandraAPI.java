@@ -111,7 +111,7 @@ public class CassandraAPI {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        Cluster cluster = CassandraConnection.createCluster(prop.getProperty("host"));
+        Cluster cluster = CassandraConnection.createCluster();
         Keyspace keyspace = HFactory.createKeyspace("LoginK", cluster);
         Mutator<String> mutator = HFactory.createMutator(keyspace, new StringSerializer());
         String rowKey = null;
@@ -184,7 +184,7 @@ public class CassandraAPI {
             e.printStackTrace();
         }
         
-        Cluster cluster = CassandraConnection.createCluster(prop.getProperty("host"));
+        Cluster cluster = CassandraConnection.createCluster();
         Keyspace keySpace = HFactory.createKeyspace("LoginK", cluster);
         SliceQuery<String, String, String> query = HFactory.createSliceQuery(keySpace, stringSerializer, stringSerializer, stringSerializer);
         query.setColumnFamily(USER).setKey(username).setColumnNames("id","username", "password","x","y","angle","health","score","bullettype","shiptype");
@@ -216,7 +216,7 @@ public class CassandraAPI {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        Cluster cluster = CassandraConnection.createCluster(prop.getProperty("host"));
+        Cluster cluster = CassandraConnection.createCluster();
         Keyspace keySpace = HFactory.createKeyspace("LoginK", cluster);
         SliceQuery<String, String, String> query = HFactory.createSliceQuery(keySpace, stringSerializer, stringSerializer, stringSerializer);
         query.setColumnFamily(USER).setKey(username).setColumnNames("id","username", "password","x","y","angle","health","score","bullettype","shiptype");

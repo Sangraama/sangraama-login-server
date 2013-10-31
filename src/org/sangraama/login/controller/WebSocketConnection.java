@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 
 public class WebSocketConnection extends MessageInbound {
     // Local Debug or logs
-    private static final String TAG = "WebSocketConnection : ";
+    private static final String TAG = "Login-Server WebSocketConnection : ";
 
     private Gson gson;
     private UserRepository userRepository;
@@ -51,12 +51,15 @@ public class WebSocketConnection extends MessageInbound {
         ClientEvent event = gson.fromJson(loginDetail, ClientEvent.class);
         switch (event.getType()) {
             case 1:
+                System.out.println(TAG + "User Login request");
                 User user;
                 if (userRepository.isUserExists(event.getUsername(), event.getPassword())) {
                     user = userRepository.getUserByUserNameAndPassWord(event.getUsername(),
                             event.getPassword());
+                    System.out.println(TAG + "User Already exist");
                 } else {
                     user = createNewUser(event.getUsername(), event.getPassword());
+                    System.out.println(TAG + "User does not exist, create new user");
                 }
                 sendUserToClient(user);
                 break;
@@ -69,6 +72,7 @@ public class WebSocketConnection extends MessageInbound {
     private void sendUserToClient(User user) throws IOException {
         String convertedString = gson.toJson(user);
         getWsOutbound().writeTextMessage(CharBuffer.wrap(convertedString));
+        System.out.println(TAG + "Sent user data to client : "+convertedString);
 
     }
 

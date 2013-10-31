@@ -1,22 +1,28 @@
 package org.sangraama.login.database.cassandra.dao;
 
+import org.sangraama.login.database.cassandra.CassandraAPI;
+
 public class UserRepositoryImpl implements UserRepository {
+    private CassandraAPI cassandraAPI;
+
+    public UserRepositoryImpl() {
+        cassandraAPI = new CassandraAPI();
+    }
 
     @Override
     public boolean isUserExists(String username, String password) {
-        return false;
+        return cassandraAPI.isUserExists(username, password);
 
     }
 
     @Override
     public User getUserByUserNameAndPassWord(String username, String password) {
-        // TODO Auto-generated method stub
-        return null;
+        return cassandraAPI.getUserByUserNameAndPassWord(username, password);
     }
 
     @Override
     public void create(User user) {
-        // TODO Auto-generated method stub
+        cassandraAPI.create(user);
 
     }
 }
