@@ -22,7 +22,7 @@ final class CassandraConnection {
    
     private static final String USERNAME_KEY = "username";
     private static final String PASSWORD_KEY = "password";
- 
+    private static String cassandraHost;
     
     //create a cluster to store data on the host in port 9160
     public static Cluster createCluster(String host) {
@@ -31,9 +31,18 @@ final class CassandraConnection {
                 new HashMap<String, String>();
         credentials.put(USERNAME_KEY, "admin");
         credentials.put(PASSWORD_KEY, "admin");
-        return HFactory.createCluster("SangraamaClusterTwo",
+        cassandraHost=host;
+        return HFactory.createCluster("SangraamaCluster2",
                 new CassandraHostConfigurator(host+":"+"9160"), credentials);
       
+    }
+
+    public static String getHost() {
+        return cassandraHost;
+    }
+
+    public void setHost(String host) {
+        this.cassandraHost = host;
     }
 
 }
