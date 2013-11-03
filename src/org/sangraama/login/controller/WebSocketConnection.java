@@ -85,8 +85,8 @@ public class WebSocketConnection extends MessageInbound {
         userImpl.setAngle(0);
         userImpl.setScore(0);
         userImpl.setHealth(100);
-        userImpl.setX(2800);
-        userImpl.setY(500);
+        userImpl.setX(2100);
+        userImpl.setY(560);
         userImpl.setShipType(1);
         userImpl.setBulletType(1);
 
