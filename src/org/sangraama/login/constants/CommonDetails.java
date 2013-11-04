@@ -4,6 +4,9 @@ public enum CommonDetails {
     INSTANCE;
     private String host;
 
+    private CommonDetails(){
+        this.host = "localhost";
+    }
     public void setHost(String host) {
         this.host = host;
     }

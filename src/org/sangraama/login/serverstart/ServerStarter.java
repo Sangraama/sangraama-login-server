@@ -1,15 +1,11 @@
 package org.sangraama.login.serverstart;
 
 import java.util.Properties;
-import javax.servlet.ServletContextEvent;
 
+import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import me.prettyprint.hector.api.Cluster;
-
 import org.sangraama.login.constants.CommonDetails;
-import org.sangraama.login.database.cassandra.CassandraAPI;
-import org.sangraama.login.database.cassandra.CassandraConnection;
 
 public class ServerStarter implements ServletContextListener {
     private Properties prop;
@@ -24,13 +20,13 @@ public class ServerStarter implements ServletContextListener {
         this.prop = new Properties();
         try {
             this.prop.load(getClass().getResourceAsStream("/conf/loginserver.properties"));
+            CommonDetails.INSTANCE.setHost(this.prop.getProperty("host"));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        CommonDetails.INSTANCE.setHost(prop.getProperty("host"));
-//        Cluster cluster = CassandraConnection.createCluster();
-//        CassandraAPI.generateKeySpace(cluster);
-//        CassandraAPI.generateColumnFamily("UserDetails");
-
+        // Cluster cluster = CassandraConnection.createCluster();
+        // CassandraAPI.generateKeySpace(cluster);
+        // CassandraAPI.generateColumnFamily("UserDetails");
+        System.out.println("Login Server Started ... ");
     }
 }
