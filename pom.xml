@@ -153,29 +153,29 @@
             <version>7.0.47</version>
             <scope>provided</scope>
         </dependency>
-<dependency>
-    <groupId>org.apache.cassandra</groupId>
-    <artifactId>cassandra-all</artifactId>
-    <version>0.7.4</version>
-</dependency>
-<dependency>
-    <groupId>com.datastax.cassandra</groupId>
-    <artifactId>cassandra-driver-core</artifactId>
-    <version>1.0.1-dse</version>
-</dependency>
-            <dependency>
-    <groupId>org.apache.cassandra</groupId>
-    <artifactId>cassandra-javautils</artifactId>
-    <version>0.7.0-rc4</version>
-</dependency>
-            <dependency>
-    <groupId>me.prettyprint</groupId>
-    <artifactId>hector-core</artifactId>
-    <version>0.7.0-29</version>
-</dependency>
-                      
-            
-            
+        <dependency>
+            <groupId>org.apache.cassandra</groupId>
+            <artifactId>cassandra-all</artifactId>
+            <version>0.7.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.datastax.cassandra</groupId>
+            <artifactId>cassandra-driver-core</artifactId>
+            <version>1.0.1-dse</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cassandra</groupId>
+            <artifactId>cassandra-javautils</artifactId>
+            <version>0.7.0-rc4</version>
+        </dependency>
+        <dependency>
+            <groupId>me.prettyprint</groupId>
+            <artifactId>hector-core</artifactId>
+            <version>0.7.0-29</version>
+        </dependency>
+
+
+
     </dependencies>
 
 

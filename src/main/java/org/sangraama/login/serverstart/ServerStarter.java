@@ -6,6 +6,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.sangraama.login.constants.CommonDetails;
+import org.sangraama.login.port.handle.PortLoader;
 
 public class ServerStarter implements ServletContextListener {
     private Properties prop;
@@ -24,6 +25,8 @@ public class ServerStarter implements ServletContextListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        PortLoader portLoader = new PortLoader();
+        portLoader.ParsePortFile();
         // Cluster cluster = CassandraConnection.createCluster();
         // CassandraAPI.generateKeySpace(cluster);
         // CassandraAPI.generateColumnFamily("UserDetails");
