@@ -7,6 +7,7 @@ import javax.servlet.ServletContextListener;
 
 import org.sangraama.login.constants.CommonDetails;
 import org.sangraama.login.port.handle.PortLoader;
+import org.sangraama.login.tile.coordination.SangraamaMap;
 
 public class ServerStarter implements ServletContextListener {
     private Properties prop;
@@ -22,6 +23,9 @@ public class ServerStarter implements ServletContextListener {
         try {
             this.prop.load(getClass().getResourceAsStream("/conf/loginserver.properties"));
             CommonDetails.INSTANCE.setHost(this.prop.getProperty("host"));
+            CommonDetails.INSTANCE.setScale(Integer.valueOf(this.prop.getProperty("scalingFactor")));
+            SangraamaMap.INSTANCE.setSubTileWidth(Float.valueOf(this.prop.getProperty("subtilewidth")));
+            SangraamaMap.INSTANCE.setSubTileHeight(Float.valueOf(this.prop.getProperty("subtileheight")));
         } catch (Exception e) {
             e.printStackTrace();
         }

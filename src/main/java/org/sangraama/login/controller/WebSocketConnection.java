@@ -15,6 +15,7 @@ import org.sangraama.login.database.cassandra.dao.UserRepositoryImpl;
 import com.google.gson.Gson;
 import org.sangraama.login.domain.PortObject;
 import org.sangraama.login.port.handle.PortLoader;
+import org.sangraama.login.tile.coordination.TileCoordinator;
 
 public class WebSocketConnection extends MessageInbound {
     // Local Debug or logs
@@ -23,11 +24,13 @@ public class WebSocketConnection extends MessageInbound {
     private Gson gson;
     private UserRepository userRepository;
     private PortLoader portLoader;
+    private TileCoordinator tileCoordinator;
 
     public WebSocketConnection() {
         this.gson = new Gson();
         this.userRepository = new UserRepositoryImpl();
         this.portLoader = new PortLoader();
+        tileCoordinator = TileCoordinator.INSTANCE;
     }
 
     @Override
@@ -74,6 +77,8 @@ public class WebSocketConnection extends MessageInbound {
     }
 
     private void sendUserToClient(User user) throws IOException {
+        String svrUrl = tileCoordinator.getSubTileHost(user.getX(),user.getY());
+        user.setServerUrl(svrUrl);
         String convertedString = gson.toJson(user);
         getWsOutbound().writeTextMessage(CharBuffer.wrap(convertedString));
         System.out.println(TAG + "Sent user data to client : " + convertedString);

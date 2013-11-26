@@ -12,6 +12,15 @@ public class UserImpl implements User {
     private int health;
     private int bulletType;
     private int shipType;
+    private String serverUrl;
+
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
+    }
 
     public int getType() {
         return type;
