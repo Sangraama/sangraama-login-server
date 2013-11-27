@@ -23,4 +23,8 @@ public interface User {
     public int getBulletType();
 
     public int getShipType();
+
+    public String getServerUrl();
+
+    public void setServerUrl(String serverUrl);
 }

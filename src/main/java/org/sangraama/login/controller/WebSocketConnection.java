@@ -13,6 +13,9 @@ import org.sangraama.login.database.cassandra.dao.UserRepository;
 import org.sangraama.login.database.cassandra.dao.UserRepositoryImpl;
 
 import com.google.gson.Gson;
+import org.sangraama.login.domain.PortObject;
+import org.sangraama.login.port.handle.PortLoader;
+import org.sangraama.login.tile.coordination.TileCoordinator;
 
 public class WebSocketConnection extends MessageInbound {
     // Local Debug or logs
@@ -20,10 +23,14 @@ public class WebSocketConnection extends MessageInbound {
 
     private Gson gson;
     private UserRepository userRepository;
+    private PortLoader portLoader;
+    private TileCoordinator tileCoordinator;
 
     public WebSocketConnection() {
         this.gson = new Gson();
         this.userRepository = new UserRepositoryImpl();
+        this.portLoader = new PortLoader();
+        tileCoordinator = TileCoordinator.INSTANCE;
     }
 
     @Override
@@ -70,13 +77,17 @@ public class WebSocketConnection extends MessageInbound {
     }
 
     private void sendUserToClient(User user) throws IOException {
+        String svrUrl = tileCoordinator.getSubTileHost(user.getX(),user.getY());
+        user.setServerUrl(svrUrl);
         String convertedString = gson.toJson(user);
         getWsOutbound().writeTextMessage(CharBuffer.wrap(convertedString));
-        System.out.println(TAG + "Sent user data to client : "+convertedString);
+        System.out.println(TAG + "Sent user data to client : " + convertedString);
 
     }
 
     private User createNewUser(String userName, String password) {
+        int portId = (int) (Math.random() * 374);
+        PortObject portObject = portLoader.getPortList().get(portId);
         UserImpl userImpl = new UserImpl();
         userImpl.setType(1);
         userImpl.setUserId((int) (Math.random() * 100000));
@@ -85,8 +96,8 @@ public class WebSocketConnection extends MessageInbound {
         userImpl.setAngle(0);
         userImpl.setScore(0);
         userImpl.setHealth(100);
-        userImpl.setX(2100);
-        userImpl.setY(560);
+        userImpl.setX(portObject.getX());
+        userImpl.setY(portObject.getY());
         userImpl.setShipType(1);
         userImpl.setBulletType(1);
 
