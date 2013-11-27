@@ -68,47 +68,13 @@ public class CassandraAPI {
         cluster.addColumnFamily(familyDefinition);
     }
 
-    // insert data into the columnfamily
-    /*public  void insert(
-            String columnList, String valueList) {
-        prop = new Properties();
-        try {
-            prop.load(getClass().getResourceAsStream("/conf/loginserver.properties"));
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        Cluster cluster = CassandraConnection.createCluster(prop.getProperty("host"));
-        Keyspace keyspace = HFactory.createKeyspace("LoginK", cluster);
-        Mutator<String> mutator = HFactory.createMutator(keyspace, new StringSerializer());
 
-        String rowKey = null;
-        // for (int i = 0; i < Integer.parseInt(rowCount); i++) {
-      //  rowKey = UUID.randomUUID().toString();
-       
-        System.out.println("\nInserting Key " + rowKey + "To Column Family " + USER
-                + "\n");
-        String[] value = valueList.split(":");
-        rowKey=value[1];
-        keyList.add(rowKey);
-        int i = 0;
-        for (String columnName : columnList.split(":")) {
-            mutator.insert(rowKey, USER,
-                    HFactory.createStringColumn(columnName, value[i]));
-
-            System.out.println("Column Name: " + columnName + " Value: " + value[i] + "\n");
-            i++;
-        }
-        // }
-
-    }*/
-    
+    //create a new user
     public void create(User user){
         prop = new Properties();
         try {
             prop.load(getClass().getResourceAsStream("/conf/loginserver.properties"));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         Cluster cluster = CassandraConnection.createCluster();
@@ -122,98 +88,100 @@ public class CassandraAPI {
         keyList.add(rowKey);
         mutator.insert(rowKey, USER,
                 HFactory.createStringColumn("id", String.valueOf(user.getUserId())));
-        System.out.println("Column Name: " + "id" + " Value: " + String.valueOf(user.getUserId()) + "\n");
         mutator.insert(rowKey, USER,
                 HFactory.createStringColumn("username", user.getUserName()));
-        System.out.println("Column Name: " + "username" + " Value: " + user.getUserName() + "\n");
         mutator.insert(rowKey, USER,
                 HFactory.createStringColumn("password", user.getPassword()));
-        System.out.println("Column Name: " + "password" + " Value: " + user.getPassword() + "\n");
         mutator.insert(rowKey, USER,
                 HFactory.createStringColumn("x", String.valueOf(user.getX())));
-        System.out.println("Column Name: " + "x" + " Value: " + String.valueOf(user.getX()) + "\n");
         mutator.insert(rowKey, USER,
                 HFactory.createStringColumn("y", String.valueOf(user.getY())));
-        System.out.println("Column Name: " + "y" + " Value: " + String.valueOf(user.getY()) + "\n");
         mutator.insert(rowKey, USER,
                 HFactory.createStringColumn("angle", String.valueOf(user.getAngle())));
-        System.out.println("Column Name: " + "angle" + " Value: " + String.valueOf(user.getAngle()) + "\n");
         mutator.insert(rowKey, USER,
                 HFactory.createStringColumn("health", String.valueOf(user.getHealth())));
-        System.out.println("Column Name: " + "health" + " Value: " + String.valueOf(user.getHealth()) + "\n");
         mutator.insert(rowKey, USER,
                 HFactory.createStringColumn("score", String.valueOf(user.getScore())));
-        System.out.println("Column Name: " + "score" + " Value: " + String.valueOf(user.getScore()) + "\n");
         mutator.insert(rowKey, USER,
                 HFactory.createStringColumn("bullettype", String.valueOf(user.getBulletType())));
-        System.out.println("Column Name: " + "bullettype" + " Value: " + String.valueOf(user.getBulletType()) + "\n");
         mutator.insert(rowKey, USER,
                 HFactory.createStringColumn("shiptype", String.valueOf(user.getShipType())));
-        System.out.println("Column Name: " + "shiptype" + " Value: " + String.valueOf(user.getShipType()) + "\n");
+
+
+
+        //for the purpose of validating the created user
+        SliceQuery<String, String, String> query = HFactory.createSliceQuery(keyspace, stringSerializer, stringSerializer, stringSerializer);
+        query.setColumnFamily(USER).setKey(rowKey).setColumnNames("id","username", "password","x","y","angle","health","score","bullettype","shiptype");
+        query.setRange("", "", false, 10);
+        List<HColumn<String, String>> columns = query.execute().get().getColumns();
+        System.out.println("############################################################");
+        System.out.println("Angle="+columns.get(0).getValue());
+        System.out.println("Bullet="+columns.get(1).getValue());
+        System.out.println("Health="+columns.get(2).getValue());
+        System.out.println("Userid="+columns.get(3).getValue());
+        System.out.println("Password="+columns.get(4).getValue());
+        System.out.println("Score="+columns.get(5).getValue());
+        System.out.println("Ship="+columns.get(6).getValue());
+        System.out.println("UserName="+columns.get(7).getValue());
+        System.out.println("X="+columns.get(8).getValue());
+        System.out.println("Y="+columns.get(9).getValue());
+
+        //System.out.println("inside create user, cassandra");
+
+
     }
 
-  /*  // retrieve data from the column family.
-    public static void retrieve(String host, String keySpace, String columnFamily, String ColumnName) {
-
-        Cluster cluster = CassandraConnection.createCluster(host);
-        Keyspace keyspace = HFactory.createKeyspace(keySpace, cluster);
-
-        ColumnQuery<String, String, String> columnQuery = HFactory
-                .createStringColumnQuery(keyspace);
-        for (String key : keyList) {
-            System.out.println("\nretrieving Key " + key + "From Column Family " + columnFamily
-                    + "\n");
-            columnQuery.setColumnFamily(columnFamily).setKey(key).setName(ColumnName);
-            QueryResult<HColumn<String, String>> result = columnQuery.execute();
-            HColumn<String, String> hColumn = result.get();
-            System.out.println("Column: " + hColumn.getName() + " Value : " + hColumn.getValue()
-                    + "\n");
-        }
-
-        // System.out.println("Value : " + hColumn.getValue());
-        // System.out.println(cluster.getName());
-
-    }*/
-    
+    //check whether a user already exists or not
     public boolean isUserExists(String username, String password){
         prop = new Properties();
         try {
             prop.load(getClass().getResourceAsStream("/conf/loginserver.properties"));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+        //System.out.println("Inside is userexists");
         Cluster cluster = CassandraConnection.createCluster();
         Keyspace keySpace = HFactory.createKeyspace("LoginK", cluster);
         SliceQuery<String, String, String> query = HFactory.createSliceQuery(keySpace, stringSerializer, stringSerializer, stringSerializer);
         query.setColumnFamily(USER).setKey(username).setColumnNames("id","username", "password","x","y","angle","health","score","bullettype","shiptype");
         query.setRange("", "", false, 10);
         List<HColumn<String, String>> columns = query.execute().get().getColumns();
-        //System.out.println("**"+columns.get(2).getValue());
+
         if(columns.size()>0){
-            
-        
+
         if(username.equals(columns.get(7).getValue())&& password.equals(columns.get(4).getValue())){
+           // System.out.println("user exists, cassandra checked.");
+            /*UserImpl testuser=new UserImpl();
+            testuser.setAngle(10);
+            testuser.setBulletType(1);
+            testuser.setHealth(200);
+            testuser.setUserId(Integer.parseInt(columns.get(3).getValue()));
+            testuser.setPassword(columns.get(4).getValue());
+            testuser.setScore(100);
+            testuser.setShipType(2);
+            testuser.setUserName(columns.get(7).getValue());
+            testuser.setX(2500);
+            testuser.setY(500);
+            updateUser(testuser);*/
             return true;
         }
         
         
         else{
-            //System.out.println(columns.get(4).getValue()+":"+columns.get(7).getValue());
+
             return false;
         }
         }
         else return false;
        
     }
-    
+
+    //retrieve a user by username and password
     public UserImpl getUserByUserNameAndPassWord(String username, String password){
         prop = new Properties();
         try {
             prop.load(getClass().getResourceAsStream("/conf/loginserver.properties"));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         Cluster cluster = CassandraConnection.createCluster();
@@ -238,6 +206,57 @@ public class CassandraAPI {
         return user;
         
     }
+
+
+    /*update existing user details*/
+    public void updateUser(User user){
+
+        Cluster cluster = CassandraConnection.createCluster();
+        Keyspace keySpace = HFactory.createKeyspace("LoginK", cluster);
+        Mutator<String> mutator = HFactory.createMutator(keySpace, new StringSerializer());
+        String rowKey=user.getUserName();
+
+       mutator.insert(rowKey, USER,
+               HFactory.createStringColumn("id", String.valueOf(user.getUserId())));
+       mutator.insert(rowKey, USER,
+                HFactory.createStringColumn("username", user.getUserName()));
+       mutator.insert(rowKey, USER,
+                HFactory.createStringColumn("password", user.getPassword()));
+       mutator.insert(rowKey, USER,
+                HFactory.createStringColumn("x", String.valueOf(user.getX())));
+       mutator.insert(rowKey, USER,
+                HFactory.createStringColumn("y", String.valueOf(user.getY())));
+       mutator.insert(rowKey, USER,
+                HFactory.createStringColumn("angle", String.valueOf(user.getAngle())));
+       mutator.insert(rowKey, USER,
+                HFactory.createStringColumn("health", String.valueOf(user.getHealth())));
+       mutator.insert(rowKey, USER,
+                HFactory.createStringColumn("score", String.valueOf(user.getScore())));
+       mutator.insert(rowKey, USER,
+                HFactory.createStringColumn("bullettype", String.valueOf(user.getBulletType())));
+       mutator.insert(rowKey, USER,
+                HFactory.createStringColumn("shiptype", String.valueOf(user.getShipType())));
+
+        ////for the purpose of validating the created user
+        SliceQuery<String, String, String> query = HFactory.createSliceQuery(keySpace, stringSerializer, stringSerializer, stringSerializer);
+        query.setColumnFamily(USER).setKey(rowKey).setColumnNames("id","username", "password","x","y","angle","health","score","bullettype","shiptype");
+        query.setRange("", "", false, 10);
+        List<HColumn<String, String>> columns = query.execute().get().getColumns();
+        System.out.println("############################################################");
+        System.out.println("Angle="+columns.get(0).getValue());
+        System.out.println("Bullet="+columns.get(1).getValue());
+        System.out.println("Health="+columns.get(2).getValue());
+        System.out.println("Userid="+columns.get(3).getValue());
+        System.out.println("Password="+columns.get(4).getValue());
+        System.out.println("Score="+columns.get(5).getValue());
+        System.out.println("Ship="+columns.get(6).getValue());
+        System.out.println("UserName="+columns.get(7).getValue());
+        System.out.println("X="+columns.get(8).getValue());
+        System.out.println("Y="+columns.get(9).getValue());
+
+
+    }
+
     
     
 

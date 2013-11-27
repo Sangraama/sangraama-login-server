@@ -25,4 +25,9 @@ public class UserRepositoryImpl implements UserRepository {
         cassandraAPI.create(user);
 
     }
+
+    @Override
+    public void updateUser(User user) {
+
+    }
 }

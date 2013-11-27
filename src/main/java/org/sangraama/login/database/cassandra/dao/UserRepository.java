@@ -7,4 +7,6 @@ public interface UserRepository {
 
     public void create(User user);
 
+    public void updateUser(User user);
+
 }

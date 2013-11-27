@@ -28,5 +28,7 @@ public class ServerStarter implements ServletContextListener {
         // CassandraAPI.generateKeySpace(cluster);
         // CassandraAPI.generateColumnFamily("UserDetails");
         System.out.println("Login Server Started ... ");
+
+
     }
 }
